@@ -17,7 +17,6 @@ export class EscenaBase {
       0.1,
       1000
     );
-    this.camera.position.set(6, 5, 8);
 
     this.renderer = new THREE.WebGLRenderer({ antialias: true });
     // Ajustamos el renderizador al tamaño del contenedor
@@ -30,8 +29,15 @@ export class EscenaBase {
     // IMPORTANTE: Lo agregamos dentro del div, no del body
     this.container.appendChild(this.renderer.domElement);
 
+    // this.camera.position.set(6, 5, 8);
+    this.camera.position.set(6, 5, 8); // Dejamos la posición igual
+
     this.controls = new OrbitControls(this.camera, this.renderer.domElement);
     this.controls.enableDamping = true;
+
+    // NUEVO: Le decimos a la cámara que apunte un poco más abajo (Y = -1)
+    // Al mirar más abajo, todo el modelo del cable se desplaza hacia arriba en la pantalla.
+    this.controls.target.set(0, -1, 0);
 
     this.crearLuces();
 

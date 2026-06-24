@@ -159,43 +159,6 @@ export class ConductorSim {
       this.particulas.geometry.attributes.position.needsUpdate = true;
     }
 
-    // // 2. ANIMAR ANILLOS Y VECTORES
-    // this.campoGrupo.children.forEach((anillo) => {
-    //   const radio = anillo.userData.radio;
-
-    //   // Rotar el anillo entero
-    //   const velocidadAngular = (I * 0.4) / radio;
-    //   anillo.rotation.y += velocidadAngular * delta;
-
-    //   anillo.material.opacity =
-    //     I === 0 ? 0 : Math.min(Math.abs(I) * 0.2 + 0.3, 1.0);
-
-    //   // SOLUCIÓN 2: Calcular la tangente puramente en Coordenadas Locales
-    //   anillo.children.forEach((flecha) => {
-    //     if (I === 0) {
-    //       flecha.visible = false;
-    //       return;
-    //     }
-    //     flecha.visible = true;
-
-    //     const anguloFijo = flecha.userData.anguloFijo;
-
-    //     // La posición local en el anillo nunca cambia
-    //     const x = Math.cos(anguloFijo) * radio;
-    //     const z = Math.sin(anguloFijo) * radio;
-    //     flecha.position.set(x, 0, z);
-
-    //     // Derivada de la circunferencia (Tangente) multiplicada por el signo de la corriente
-    //     const sentido = -Math.sign(I);
-    //     const dirX = -Math.sin(anguloFijo) * sentido;
-    //     const dirZ = Math.cos(anguloFijo) * sentido;
-
-    //     // Como la flecha es "hija" del anillo, aplicamos esta dirección local y
-    //     // Three.js se encarga mágicamente de rotarla junto con el anillo
-    //     const direccionLocal = new THREE.Vector3(dirX, 0, dirZ).normalize();
-    //     flecha.setDirection(direccionLocal);
-    //   });
-    // });
     // 2. ANIMAR ANILLOS Y VECTORES
     this.campoGrupo.children.forEach((anillo) => {
       const radio = anillo.userData.radio;

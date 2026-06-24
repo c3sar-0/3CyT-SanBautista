@@ -18,10 +18,12 @@ const base = new EscenaBase();
 const simulacion = new ConductorSim(base.scene);
 
 // Configurar Interfaz de Usuario (lil-gui)
-const gui = new GUI({ title: "Control de valores" });
-gui.domElement.style.position = "absolute";
-gui.domElement.style.top = "20px";
-gui.domElement.style.right = "20px";
+const gui = new GUI({
+  title: "Control de valores",
+  container: document.getElementById("gui-container"),
+});
+// gui.domElement.style.position = "absolute";
+// gui.domElement.style.right = "20px";
 
 // ARREGLADO: Pasamos explícitamente el cambio de estado mediante un objeto a actualizarParametros
 gui
