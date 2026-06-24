@@ -6,6 +6,9 @@ body {
   color: #ffffff;
   overflow-y: auto;
 }
+footer a {
+  color: #e0e0e0;
+}
 #simulador-wrapper {
   position: relative;
   width: 100%;
