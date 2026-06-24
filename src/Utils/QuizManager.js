@@ -67,7 +67,7 @@ export class QuizManager {
   toggleSolucion() {
     this.solucionVisible = !this.solucionVisible;
     if (this.solucionVisible) {
-      this.elSolucionBox.style.style.display = "block";
+      this.elSolucionBox.style.display = "block";
       this.btnSolucion.innerText = "Ocultar Solución";
     } else {
       this.elSolucionBox.style.display = "none";
