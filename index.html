@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simulador de Campo Magnético 3D</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
+    />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    ></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="simulador-wrapper">
+      <div id="ui-container">
+        <h1>Laboratorio de Electromagnetismo</h1>
+        <p>
+          Usa el simulador como apoyo visual para resolver los desafíos teóricos
+          de abajo.
+        </p>
+      </div>
+    </div>
+
+    <main class="seccion-contenido">
+      <h2>Hojas de Problemas Interactivos</h2>
+
+      <div class="contenedor-quiz">
+        <div id="quiz-num" class="meta-info">Ejercicio 1 de X</div>
+        <div id="quiz-pregunta" class="texto-pregunta">
+          Cargando pregunta...
+        </div>
+
+        <div id="quiz-solucion-box" class="contenedor-solucion">
+          <strong style="color: #00d2ff; display: block; margin-bottom: 5px"
+            >Solución Desarrollada:</strong
+          >
+          <div id="quiz-solucion" class="texto-solucion">
+            Cargando solución...
+          </div>
+        </div>
+
+        <div class="bloque-botones">
+          <button id="btn-solucion" class="btn btn-primario">
+            Mostrar Solución
+          </button>
+          <button id="btn-siguiente" class="btn btn-secundario">
+            Siguiente Ejercicio →
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>

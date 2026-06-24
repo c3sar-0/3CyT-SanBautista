@@ -1,0 +1,17 @@
+[
+    {
+      "id": 1,
+      "pregunta": "Un conductor recto muy largo transporta una corriente eléctrica de $$I = 8\\text{ A}$$. Deseas determinar la magnitud del campo magnético inducido en un punto del espacio situado a una distancia radial de $$r = 0.05\\text{ m}$$ del centro del cable. <br><br>Utiliza la Ley de Ampère para calcularlo (Dato: $$\\mu_0 = 4\\pi \\times 10^{-7}\\text{ T}\\cdot\\text{m/A}$$).",
+      "solucion": "Aplicamos la ecuación de Ampère para un conductor rectilíneo uniforme: $$B = \\frac{\\mu_0 \\cdot I}{2\\pi \\cdot r}$$ <br>Sustituyendo los valores numéricos del enunciado correspondientes: $$B = \\frac{(4\\pi \\times 10^{-7}) \\cdot 8}{2\\pi \\cdot 0.05}$$ <br>Simplificando el término $$2\\pi$$ nos queda: $$B = \\frac{2 \\times 10^{-7} \\cdot 8}{0.05} = \\frac{16 \\times 10^{-7}}{0.05} = 3.2 \\times 10^{-4}\\text{ Tesla}$$ (o bien $$0.32\\text{ mT}$$). <br><br>¡Puedes ajustar la corriente del simulador para ver de forma gráfica cómo cambian de longitud relativa los vectores de campo!"
+    },
+    {
+      "id": 2,
+      "pregunta": "Si la corriente $$I$$ de un sistema se duplica por completo y al mismo tiempo nos alejamos a una distancia del cable igual al doble del radio original ($2r$), ¿qué sucede con la intensidad del campo magnético $$B$$ final?",
+      "solucion": "Analizando la Ley de Ampère de forma puramente algebraica: $$B_{nuevo} = \\frac{\\mu_0 \\cdot (2I)}{2\\pi \\cdot (2r)}$$ <br><br>Al cancelar el factor multiplicativo $$2$$ tanto en el numerador como en el denominador, la expresión matemática regresa exactamente a su estado inicial: $$B_{nuevo} = B_{original}$$ <br><br>Por lo tanto, **el campo magnético permanece idéntico**. La distancia compensa exactamente el incremento de corriente eléctrica."
+    },
+    {
+      "id": 3,
+      "pregunta": "Un protón se desplaza horizontalmente hacia la derecha con una velocidad de $$v = 10^5\\text{ m/s}$$ de forma paralela a nuestro conductor recto. Si la corriente eléctrica va hacia arriba, ¿hacia dónde apunta la **Fuerza Magnética de Lorentz** ($$\\vec{F} = q \\cdot \\vec{v} \\times \\vec{B}$$) que experimenta el protón?",
+      "solucion": "Debido a la Regla de la Mano Derecha aplicada en el simulador 3D, en la región lateral donde viaja la partícula, el campo magnético $$\\vec{B}$$ apunta **entrando perpendicularmente a la pantalla** (o plano de movimiento). <br><br>Utilizando el producto vectorial de Lorentz (mano derecha de nuevo para el producto cruz): indexando los dedos desde la velocidad (derecha) hacia el campo (adentro), el pulgar nos indica que la fuerza resultante apunta **verticalmente hacia arriba**, desviando la trayectoria de la carga positivamente."
+    }
+  ]
