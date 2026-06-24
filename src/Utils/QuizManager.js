@@ -1,16 +1,10 @@
-// IMPORTANTE: Ahora importamos directamente el archivo .json
-const baseEjercicios = await fetch("../ejercicios.json").then((data) =>
-  data.json()
-);
-
 export class QuizManager {
   constructor() {
-    // El resto del código permanece exactamente igual
-    this.ejercicios = baseEjercicios;
+    this.ejercicios = []; // Arranca vacío mientras se descarga
     this.indexActual = 0;
     this.solucionVisible = false;
 
-    // Mapear elementos del DOM
+    // Mapear elementos del DOM (esto se hace de inmediato)
     this.elNum = document.getElementById("quiz-num");
     this.elPregunta = document.getElementById("quiz-pregunta");
     this.elSolucionBox = document.getElementById("quiz-solucion-box");
@@ -18,8 +12,24 @@ export class QuizManager {
     this.btnSolucion = document.getElementById("btn-solucion");
     this.btnSiguiente = document.getElementById("btn-siguiente");
 
-    this.initEvents();
-    this.mostrarEjercicio();
+    // Disparamos la carga asíncrona
+    this.init();
+  }
+
+  async init() {
+    try {
+      // Buscamos el archivo en la raíz del servidor (gracias a la carpeta public/)
+      const data = await fetch("/ejercicios.json");
+      this.ejercicios = await data.json();
+
+      // Una vez que los datos llegaron, activamos los eventos y mostramos el primer ítem
+      this.initEvents();
+      this.mostrarEjercicio();
+    } catch (error) {
+      console.error("Error cargando el archivo JSON de ejercicios:", error);
+      this.elPregunta.innerText =
+        "Error al cargar los ejercicios. Intenta de nuevo más tarde.";
+    }
   }
 
   initEvents() {
@@ -30,6 +40,7 @@ export class QuizManager {
   }
 
   mostrarEjercicio() {
+    // ... (Este método queda exactamente igual que antes) ...
     const item = this.ejercicios[this.indexActual];
 
     this.elNum.innerText = `Ejercicio ${this.indexActual + 1} de ${
@@ -56,7 +67,7 @@ export class QuizManager {
   toggleSolucion() {
     this.solucionVisible = !this.solucionVisible;
     if (this.solucionVisible) {
-      this.elSolucionBox.style.display = "block";
+      this.elSolucionBox.style.style.display = "block";
       this.btnSolucion.innerText = "Ocultar Solución";
     } else {
       this.elSolucionBox.style.display = "none";
