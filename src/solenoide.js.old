@@ -1,0 +1,163 @@
+import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
+import GUI from "lil-gui";
+
+export function initSimuladorSolenoide(container) {
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color("#0b0b0e");
+
+  const camera = new THREE.PerspectiveCamera(
+    45,
+    container.clientWidth / container.clientHeight,
+    0.1,
+    1000
+  );
+  camera.position.set(20, 20, 20);
+
+  const renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setSize(container.clientWidth, container.clientHeight);
+  container.appendChild(renderer.domElement);
+
+  const controls = new OrbitControls(camera, renderer.domElement);
+  controls.enableDamping = true;
+
+  // Parámetros de simulación
+  const params = {
+    corriente: 5,
+    vueltas: 10,
+    longitud: 15,
+    radio: 3,
+  };
+
+  let solenoideMesh, lineasCampoGroup;
+
+  // Clase para generar la espiral del solenoide
+  class EspiralCurve extends THREE.Curve {
+    constructor(vueltas, longitud, radio) {
+      super();
+      this.vueltas = vueltas;
+      this.longitud = longitud;
+      this.radio = radio;
+    }
+    getPoint(t, optionalTarget = new THREE.Vector3()) {
+      const x = this.radio * Math.cos(this.vueltas * Math.PI * 2 * t);
+      const y = this.radio * Math.sin(this.vueltas * Math.PI * 2 * t);
+      const z = (t - 0.5) * this.longitud; // Centrado en el origen
+      return optionalTarget.set(x, y, z);
+    }
+  }
+
+  function generarSimulacion() {
+    // Limpiar geometrías anteriores
+    if (solenoideMesh) scene.remove(solenoideMesh);
+    if (lineasCampoGroup) scene.remove(lineasCampoGroup);
+
+    // 1. Dibujar Solenoide (Cobre)
+    const curve = new EspiralCurve(
+      params.vueltas,
+      params.longitud,
+      params.radio
+    );
+    const tubeGeo = new THREE.TubeGeometry(
+      curve,
+      params.vueltas * 20,
+      0.2,
+      8,
+      false
+    );
+    const tubeMat = new THREE.MeshStandardMaterial({
+      color: 0xb87333,
+      metalness: 0.8,
+      roughness: 0.2,
+    });
+    solenoideMesh = new THREE.Mesh(tubeGeo, tubeMat);
+    scene.add(solenoideMesh);
+
+    // 2. Dibujar Líneas de Campo Magnético (Azul)
+    lineasCampoGroup = new THREE.Group();
+
+    // Densidad visual basada en B = (u0 * N * I) / L (simplificado visualmente)
+    const densidadB = Math.floor(
+      (params.vueltas / params.longitud) * params.corriente * 2
+    );
+    const numLineas = Math.max(1, Math.min(densidadB, 30)); // Limitar entre 1 y 30 líneas
+
+    for (let i = 0; i < numLineas; i++) {
+      const radioLinea = (i / numLineas) * (params.radio * 0.8); // Distribuir líneas dentro del radio
+      const angulo = (i / numLineas) * Math.PI * 2;
+
+      const p1 = new THREE.Vector3(
+        radioLinea * Math.cos(angulo),
+        radioLinea * Math.sin(angulo),
+        -params.longitud / 2 - 5
+      );
+      const p2 = new THREE.Vector3(
+        radioLinea * Math.cos(angulo),
+        radioLinea * Math.sin(angulo),
+        params.longitud / 2 + 5
+      );
+
+      const geoLinea = new THREE.BufferGeometry().setFromPoints([p1, p2]);
+      const matLinea = new THREE.LineBasicMaterial({
+        color: 0x00d2ff,
+        transparent: true,
+        opacity: Math.max(0.2, params.corriente / 10), // Más corriente = más brillante
+      });
+
+      const linea = new THREE.Line(geoLinea, matLinea);
+      lineasCampoGroup.add(linea);
+    }
+
+    scene.add(lineasCampoGroup);
+  }
+
+  // Luces
+  const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+  scene.add(ambientLight);
+  const pointLight = new THREE.PointLight(0xffffff, 1);
+  pointLight.position.set(10, 20, 10);
+  scene.add(pointLight);
+
+  // Interfaz de Usuario GUI
+  const gui = new GUI({
+    container: container,
+    title: "Controles del Solenoide",
+  });
+  gui.domElement.style.position = "absolute";
+  gui.domElement.style.right = "20px";
+  gui.domElement.style.bottom = "20px";
+
+  gui
+    .add(params, "corriente", 0, 10, 0.5)
+    .name("Corriente (I)")
+    .onChange(generarSimulacion);
+  gui
+    .add(params, "vueltas", 5, 30, 1)
+    .name("Cant. de Espiras (N)")
+    .onChange(generarSimulacion);
+  gui
+    .add(params, "longitud", 10, 30, 1)
+    .name("Longitud (L)")
+    .onChange(generarSimulacion);
+  gui
+    .add(params, "radio", 2, 8, 0.5)
+    .name("Radio (r)")
+    .onChange(generarSimulacion);
+
+  generarSimulacion(); // Generación inicial
+
+  // Bucle de renderizado
+  function animate() {
+    requestAnimationFrame(animate);
+    controls.update();
+    renderer.render(scene, camera);
+  }
+  animate();
+
+  // Adaptabilidad a la ventana
+  window.addEventListener("resize", () => {
+    camera.aspect = container.clientWidth / container.clientHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(container.clientWidth, container.clientHeight);
+  });
+}

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Simulador de Campo Magnético 3D</title>
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css"
+    />
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"
+    ></script>
+    <script
+      defer
+      src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+    ></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="ui-container">
+      <h1>Laboratorio de Electromagnetismo</h1>
+      <p>
+        Simulador interactivo del campo magnetico generado por un conductor
+        recto, y ejercicios con sus soluciones.
+      </p>
+    </div>
+    <div id="simulador-wrapper">
+      <div id="gui-container"></div>
+    </div>
+
+    <main class="seccion-contenido">
+      <h2>Video teórico</h2>
+      <div class="contenedor-video">
+        <iframe
+          src="https://www.youtube-nocookie.com/embed/YAuRdyjMdhk?si=zn3JPQNpJ8VBCkLd"
+          title="YouTube video player"
+          frameborder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+          referrerpolicy="strict-origin-when-cross-origin"
+          allowfullscreen
+        ></iframe>
+      </div>
+
+      <h2>Regla de la mano derecha</h2>
+      <div class="contenedor-quiz">
+        <div class="texto-pregunta">
+          Para hallar la dirección y el sentido del campo magnético generado por
+          el conductor recto, utiliza la regla de la mano derecha: tu pulgar
+          debe apuntar en el sentido de la corriente y el resto de dedos al
+          cerrar la mano indican el sentido del campo magnético.
+        </div>
+        <img id="okak" src="/okak-4x.png" alt="okak-4x" />
+      </div>
+
+      <h2>Hojas de Problemas Interactivos</h2>
+      <div class="contenedor-quiz">
+        <div id="quiz-num" class="meta-info">Ejercicio 1 de X</div>
+        <div id="quiz-pregunta" class="texto-pregunta">
+          Cargando pregunta...
+        </div>
+
+        <div id="quiz-solucion-box" class="contenedor-solucion">
+          <strong style="color: #00d2ff; display: block; margin-bottom: 5px"
+            >Solución Desarrollada:</strong
+          >
+          <div id="quiz-solucion" class="texto-solucion">
+            Cargando solución...
+          </div>
+        </div>
+
+        <div class="bloque-botones">
+          <button id="btn-solucion" class="btn btn-primario">
+            Mostrar Solución
+          </button>
+          <button id="btn-siguiente" class="btn btn-secundario">
+            Siguiente Ejercicio →
+          </button>
+        </div>
+      </div>
+    </main>
+
+    <script type="module" src="/src/main.js"></script>
+  </body>
+  <footer>
+    <a href="https://3ctsanbautista.netlify.app">Propuesta para el aula</a> by
+    <a href="https://github.com/c3sar-0">César Calandria</a> is marked
+    <a href="https://creativecommons.org/publicdomain/zero/1.0/">CC0 1.0</a
+    ><img
+      src="https://mirrors.creativecommons.org/presskit/icons/cc.svg"
+      alt=""
+      style="max-width: 1em; max-height: 1em; margin-left: 0.2em"
+    /><img
+      src="https://mirrors.creativecommons.org/presskit/icons/zero.svg"
+      alt=""
+      style="max-width: 1em; max-height: 1em; margin-left: 0.2em"
+    />
+  </footer>
+</html>

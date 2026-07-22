@@ -3,9 +3,9 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { Resizer } from "../Utils/Resizer.js";
 
 export class EscenaBase {
-  constructor() {
+  constructor(container) {
     // Buscamos el contenedor específico del HTML
-    this.container = document.getElementById("simulador-wrapper");
+    this.container = container;
 
     this.scene = new THREE.Scene();
     this.scene.background = new THREE.Color(0x0b0b0e);

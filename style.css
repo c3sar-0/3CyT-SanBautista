@@ -6,25 +6,27 @@ body {
   color: #ffffff;
   overflow-y: auto;
 }
+/* 
+footer {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 15px;
+  text-align: center;
+  color: #fff;
+  font-weight: bold;
+} */
+
 footer a {
   color: #e0e0e0;
 }
-#simulador-wrapper {
-  position: relative;
-  width: 100%;
-  height: 70vh;
-  border-bottom: 2px solid #222;
-}
-#gui-container {
+.lil-gui {
   position: absolute;
   right: 20px;
   bottom: 20px;
   display: flex;
-  /* width: 10rem;
-  height: 9rem; */
-}
-.lil-gui {
-  position: static !important;
+  /* position: static !important; */
   width: 256px !important; /* Ancho estándar de la cajita */
 }
 #ui-container {
@@ -134,4 +136,59 @@ p {
 
 #okak {
   width: 100%;
+}
+
+/* Navegación */
+#navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: #14141f;
+  padding: 15px 30px;
+  border-bottom: 1px solid #2a2a40;
+}
+.nav-logo {
+  font-weight: bold;
+  color: #00d2ff;
+  font-size: 1.2rem;
+}
+.nav-btn {
+  background: transparent;
+  color: #fff;
+  border: 1px solid #2a2a40;
+  padding: 8px 16px;
+  margin-left: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.nav-btn:hover {
+  background: #00d2ff;
+  color: #000;
+}
+
+/* Enrutador de Vistas */
+.view-container {
+  display: none; /* Oculto por defecto */
+  width: 100%;
+  /* height: calc(100vh - 60px); */
+  position: relative;
+}
+.view-container.active {
+  display: block; /* Muestra solo el activo */
+}
+.sim-wrapper {
+  width: 100%;
+  height: 70vh;
+  position: relative;
+}
+.sim-ui {
+  /* position: absolute;
+  top: 20px;
+  left: 20px; */
+  background: rgba(15, 15, 25, 0.85);
+  padding: 15px;
+  border-radius: 10px;
+  pointer-events: none;
+  z-index: 10;
 }
