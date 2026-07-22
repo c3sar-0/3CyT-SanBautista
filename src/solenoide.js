@@ -54,6 +54,12 @@ export function initSimuladorSolenoide(container) {
     opacity: 0.8,
   });
 
+  function updateLength() {
+    // Actualizar la longitud del solenoide y cambiar el limite de dibujo para que sea acorde
+    params.limiteEspacial = params.longitud - 2;
+    generarSimulacion();
+  }
+
   function generarSimulacion() {
     // 1. Limpiar geometría anterior
     if (solenoideMesh) scene.remove(solenoideMesh);
@@ -271,14 +277,15 @@ export function initSimuladorSolenoide(container) {
   gui
     .add(params, "longitud", 5, 30, 1)
     .name("Longitud (L)")
-    .onChange(generarSimulacion);
+    .onChange(updateLength);
   gui
     .add(params, "radio", 2, 8, 0.5)
     .name("Radio (r)")
     .onChange(generarSimulacion);
   gui
-    .add(params, "limiteEspacial", 1, 20, 2)
+    .add(params, "limiteEspacial", 1, 28, 2)
     .name("Límite Espacial")
+    .listen()
     .onChange(generarSimulacion);
 
   // Primera generación
