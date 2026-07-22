@@ -31,8 +31,9 @@ export function initSimuladorSolenoide(container) {
     vueltas: 15,
     longitud: 15,
     radio: 3,
-    lineasCampo: 17, // Cantidad de semillas a trazar
+    lineasCampo: 4, // Cantidad de semillas a trazar
     resolucionCable: 30, // Puntos por cada vuelta
+    limiteEspacial: 13, // limite de dibujo de las lineas de campo
   };
 
   let solenoideMesh;
@@ -124,50 +125,83 @@ export function initSimuladorSolenoide(container) {
     // 4. Trazado de líneas de campo (Streamline Tracing)
     const pasoIntegracion = 0.5;
     const maxPasos = 250; // Límite para que no se calcule infinitamente
-    const limiteEspacial = params.longitud * 0.8; // Límite de la caja de simulación
+    // const limiteEspacial = params.longitud - 2.5; // Límite de la caja de simulación
+    const limiteEspacial = params.limiteEspacial; // Límite de la caja de simulación
 
     // Generar puntos "semilla" (desde dónde nace cada línea de campo)
-    // Distribución volumétrica uniforme en el disco central (z=0)
     const semillas = [];
-    const totalLineas = params.lineasCampo; // Multiplicamos para poblar bien el espacio 3D
 
-    for (let i = 1; i <= totalLineas; i++) {
-      // 1. Distribución por área uniforme usando raíz cuadrada (evita amontonamiento en el centro)
-      // const r = Math.sqrt(i / totalLineas) * (params.radio * 0.85);
-      const r = (i / totalLineas) * (params.radio * 0.85);
+    // 1. Calculamos la intensidad relativa del campo (proporcional a B)
+    // B es proporcional a (Corriente * Espiras) / Longitud
+    const intensidadB = (params.corriente * params.vueltas) / params.longitud;
 
-      // 2. Ángulo basado en la proporción áurea para una dispersión geométrica perfecta en 3D
-      const theta = i * 2.39996; // 137.5 grados en radianes
+    // 2. Traducimos esa intensidad a cantidad de anillos concéntricos.
+    // Usamos un factor de escala (ej. 0.4) para que valores estándar den 2 o 3 anillos.
+    // Limitamos el máximo a 4 anillos (61 líneas en total) para cuidar el rendimiento.
+    const anillos = Math.max(1, Math.min(6, Math.floor(intensidadB * 0.4)));
 
-      const x = r * Math.cos(theta);
-      const y = r * Math.sin(theta);
+    // --- DISTRIBUCIÓN 3D EN ANILLOS CONCÉNTRICOS ---
+    // const radioMaximo = params.radio * 0.5;
+    const radioMaximo = params.radio * 0.7;
 
-      semillas.push(new THREE.Vector3(x, y, 0));
-    }
+    // 3. Siempre colocamos una línea exactamente en el eje central
+    semillas.push(new THREE.Vector3(0, 0, 0));
 
-    // Semillas externas (para ver el campo de retorno por fuera) distribuidas en un anillo exterior
-    const totalExternas = 0;
-    for (let i = 0; i < totalExternas; i++) {
-      const theta = (i / totalExternas) * Math.PI * 2;
-      const x = params.radio * 1.6 * Math.cos(theta);
-      const y = params.radio * 1.6 * Math.sin(theta);
-      semillas.push(new THREE.Vector3(x, y, 0));
+    // 4. Generamos los anillos concéntricos hacia afuera
+    // Si anillos es 0 (campo muy débil), este bucle no se ejecuta.
+    for (let anillo = 1; anillo <= anillos; anillo++) {
+      // Distancia uniforme desde el centro para este anillo
+      const r = (anillo / anillos) * radioMaximo;
+
+      // Para que la separación entre líneas se mantenga constante,
+      // los anillos más grandes necesitan tener más líneas (6, 12, 18, 24...)
+      const lineasEnEsteAnillo = anillo * 3;
+
+      for (let i = 0; i < lineasEnEsteAnillo; i++) {
+        const theta = (i / lineasEnEsteAnillo) * Math.PI * 2;
+        const x = r * Math.cos(theta);
+        const y = r * Math.sin(theta);
+        semillas.push(new THREE.Vector3(x, y, 0));
+      }
     }
 
     // // Generar puntos "semilla" (desde dónde nace cada línea de campo)
-    // // Los distribuimos en un plano en el centro del solenoide (z=0)
     // const semillas = [];
-    // for (let i = 0; i < params.lineasCampo; i++) {
-    //   // Semillas internas (dentro del radio)
-    //   const radioInterno = (i / params.lineasCampo) * (params.radio * 0.85);
-    //   semillas.push(new THREE.Vector3(radioInterno, 0, 0));
-    //   if (radioInterno > 0)
-    //     semillas.push(new THREE.Vector3(-radioInterno, 0, 0));
+
+    // // --- DISTRIBUCIÓN 3D EN ANILLOS CONCÉNTRICOS ---
+    // const radioMaximo = params.radio * 0.5;
+
+    // // Calculamos cuántos anillos caben según el valor del GUI
+    // const anillos = Math.max(1, Math.floor(params.lineasCampo / 2));
+
+    // // 1. Siempre colocamos una línea exactamente en el eje central
+    // semillas.push(new THREE.Vector3(0, 0, 0));
+
+    // // 2. Generamos los anillos concéntricos hacia afuera
+    // for (let anillo = 1; anillo <= anillos; anillo++) {
+    //   // Distancia uniforme desde el centro para este anillo
+    //   const r = (anillo / anillos) * radioMaximo;
+
+    //   // Para que la separación entre líneas se mantenga constante,
+    //   // los anillos más grandes necesitan tener más líneas (6, 12, 18...)
+    //   const lineasEnEsteAnillo = anillo * 6;
+
+    //   for (let i = 0; i < lineasEnEsteAnillo; i++) {
+    //     const theta = (i / lineasEnEsteAnillo) * Math.PI * 2;
+    //     const x = r * Math.cos(theta);
+    //     const y = r * Math.sin(theta);
+    //     semillas.push(new THREE.Vector3(x, y, 0));
+    //   }
     // }
 
-    // // Semillas externas para ver el campo de retorno
-    // semillas.push(new THREE.Vector3(params.radio * 1.5, 0, 0));
-    // semillas.push(new THREE.Vector3(-params.radio * 1.5, 0, 0));
+    // // 3. Semillas externas (campo de retorno)
+    // semillas.push(new THREE.Vector3(params.radio * 1.6, 0, 0));
+    // semillas.push(new THREE.Vector3(-params.radio * 1.6, 0, 0));
+    // if (anillos > 1) {
+    //   // Retorno superior e inferior para que el 3D luzca bien
+    //   semillas.push(new THREE.Vector3(0, params.radio * 1.6, 0));
+    //   semillas.push(new THREE.Vector3(0, -params.radio * 1.6, 0));
+    // }
 
     // Integración por método de Euler
     semillas.forEach((semilla) => {
@@ -241,6 +275,10 @@ export function initSimuladorSolenoide(container) {
   gui
     .add(params, "radio", 2, 8, 0.5)
     .name("Radio (r)")
+    .onChange(generarSimulacion);
+  gui
+    .add(params, "limiteEspacial", 1, 20, 2)
+    .name("Límite Espacial")
     .onChange(generarSimulacion);
 
   // Primera generación
